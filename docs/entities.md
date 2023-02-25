@@ -22,14 +22,14 @@ A server instance
 ### Methods:
 
 - `run` - method to run the server. Returns promise;
-- `on` - method to register a request handler. Gets http method, request path and callback function with Request class
+- `on` - method to register a request handler. Gets http method, request path and callback function with Context class
   instance (see below). Function should return Response class instance or a promise that returns Response class
   instance. Also you can provide [formidable](https://npmjs.com/package/formidable) options as fourth parameter;
 - `use` - method to [define a middleware](./get-started/#define-middlewares)
 
-## Request class
+## Context class
 
-A request object is in every handler function
+An object with request data is in every handler function
 
 ### Properties:
 
@@ -43,6 +43,10 @@ A request object is in every handler function
   Server class;
 - `files` - An object with uploaded files info. Is formidable files object (available if you passed formidable options (
   or empty) object in your 'on' method at Server class)
+
+### Methods
+
+- `setResponseHeaders` - Set response headers (provide as an object)
 
 ## Response class
 

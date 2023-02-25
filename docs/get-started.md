@@ -8,7 +8,7 @@ sidebar_position: 1
 
 In this page we describe how to run yet-another-http. We recommend to use TypeScript
 
-## Let install yet-another-http
+## Let's install yet-another-http
 
 Open your terminal and run:
 
@@ -78,26 +78,26 @@ You can read about Response object [here](./entities/#response-class).
 
 ### Fetching client data
 
-You can get request data from HTTP request (get query, application/json, multipart/form-data and so on)
-via [Request](./entities/#request-class) object provided to every handler
+You can get HTTP request data (get query, application/json, multipart/form-data and so on)
+via [Context](./entities/#context-class) object provided to every handler
 
 ```typescript
-server.on("GET", "/", (request) => {
+server.on("GET", "/", (context) => {
 
   // Read request data (only for POST, PUT requests):
-  console.log(request.fields);
+  console.log(context.fields);
 
   // Read uploaded files (only for POST, PUT requests)
-  console.log(request.files);
+  console.log(context.files);
 
   // Read request IP address
-  console.log(request.ip);
+  console.log(context.ip);
 
   // Read request headers
-  console.log(request.headers)
+  console.log(context.headers)
 
   // Read reuest query parameters
-  console.log(request.queryParams)
+  console.log(context.queryParams)
 
   return new Response(200, "Hello World");
 }, {
@@ -113,7 +113,7 @@ authorization
 ### Let\`s implement a middleware
 
 ```typescript
-server.use((request) => {
+server.use((context) => {
 
   // Your code...
 
@@ -133,33 +133,32 @@ server.use((request) => {
 ### Logger example:
 
 ```typescript
-server.use((request) => {
-  console.log(`New request from ${request.ip}: ${request.method} ${request.path}`)
+server.use((context) => {
+  console.log(`New request from ${context.ip}: ${context.method} ${context.path}`)
 });
 ```
 
 No need to call `next` function
 
-## Request context
+## Request context data
 
-You can pass data from middlewares to regular handlers using context. Context is property of Request object. Is
-javascript Map class instance
+You can pass data from middlewares to regular handlers using context data. This is javascript Map class instance
 
-### Let\`s use context
+### Let\`s use context data
 
 ```typescript
-server.use((request) => {
-  request.context.set('my-data', "Congritta is awesome!");
+server.use((context) => {
+  context.data.set('my-data', "Congritta is awesome!");
 });
 
-server.use((request) => {
-  request.context.set('my-number', "21");
+server.use((context) => {
+  context.data.set('my-number', "21");
 });
 
 server.on("GET", "/", () => {
 
-  console.log(request.context.get('my-data')); // Congritta is awesome!
-  console.log(request.context.get('my-number')); // 21
+  console.log(context.data.get('my-data')); // Congritta is awesome!
+  console.log(context.data.get('my-number')); // 21
 
   return new Reponse(200, "Hello World");
 });
@@ -171,7 +170,7 @@ server.on("GET", "/", () => {
 server.on("GET", "/", async() => {
 
   return new Response(200, fs.createReadStream('path to file'), {
-    'content-type': 'audio/mp3' // Not required to specify
+    'content-type': 'audio/mp3' // If we're sending mp3 file
   });
 });
 ```
